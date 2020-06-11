@@ -94,6 +94,10 @@ int lite_queue_get_item_counts(lite_queue_t* queue)
 
     pthread_mutex_lock(&queue->mutex);
     counts = (queue->rear - queue->front >= 0) ? queue->rear - queue->front : queue->rear - queue->front + queue->size;
+    if (counts == 0)
+    {
+        counts = (queue->rear == queue->front) ? 0 : queue->size - 1;
+    }
     pthread_mutex_unlock(&queue->mutex);
 
     return counts;
